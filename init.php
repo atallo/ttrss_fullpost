@@ -1,4 +1,8 @@
 <?php
+
+//
+// More info about this plugin in: https://github.com/atallo/ttrss_fullpost/
+//
 class Af_Full extends Plugin {
 	private $host;
 

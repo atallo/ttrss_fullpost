@@ -10,8 +10,8 @@ Installation
     cd ttrss-dir/plugins
     mkdir af_fullpost
     cd af_fullpost
-    wget
-    wget
+    wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.inc.php
+    wget https://github.com/atallo/ttrss_fullpost/raw/master/init.php
 
 And now use TTRSS preferences.
 
