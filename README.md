@@ -24,3 +24,7 @@ This plugin requites php-readiality libary
 
 https://github.com/feelinglucky/php-readability
 
+Notes
+------------------------
+
+Please don't fork, send a patch
