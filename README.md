@@ -3,7 +3,6 @@ ttrss_fullpost
 
 Tiny Tiny RSS Plugin to see full post. Converts partial post-feed in full-feed post.
 
-
 Installation
 ------------------------
 
@@ -13,8 +12,10 @@ Installation
     wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.inc.php
     wget https://github.com/atallo/ttrss_fullpost/raw/master/init.php
 
-And now use TTRSS preferences.
+Use
+------------------------
 
+Edit a Feed in TTRSS and check "Show full post"
 
 Requires
 ------------------------
@@ -22,3 +23,4 @@ Requires
 This plugin requites php-readiality libary
 
 https://github.com/feelinglucky/php-readability
+
