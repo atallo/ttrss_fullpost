@@ -22,15 +22,20 @@ Edit a Feed in TTRSS and check "Show full post"
 Requires
 ------------------------
 
-This plugin requites php-readiality libary
+This plugin requites php-readiality library
 
-Links
+Thanks
 ------------------------
 
-https://github.com/feelinglucky/php-readability
-https://github.com/j0k3r/php-readability
-http://fivefilters.org/content-only/
-https://github.com/mihailShumilov/readability
+* https://github.com/feelinglucky/php-readability
+* https://github.com/j0k3r/php-readability
+* http://fivefilters.org/content-only/
+* https://github.com/robeee/php-readability
+* https://github.com/mihailShumilov/readability
+* https://github.com/ManuelW77/ttrss_fullpost
+* https://github.com/itohsnap/ttrss_fullpost
+* https://github.com/ranzhe/ttrss_fullpost
+
 
 Notes
 ------------------------
