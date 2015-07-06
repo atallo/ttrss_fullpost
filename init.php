@@ -3,7 +3,7 @@ class Af_Full extends Plugin {
 	private $host;
 
 	function about() {
-		return array(0.09,
+		return array(0.99,
 			"Full post (requires CURL)",
 			"atallo");
 	}
@@ -68,6 +68,64 @@ class Af_Full extends Plugin {
 	}
 
 	private function get_full_post($request_url) {
+		// now an amalgamation of code from:
+		//   1) https://github.com/feelinglucky/php-readability
+		//   2) http://code.fivefilters.org/php-readability/src
+		include_once 'Readability.php';
+
+		$handle = curl_init();
+		curl_setopt_array($handle, array(
+			CURLOPT_USERAGENT => USER_AGENT,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HEADER  => false,
+			CURLOPT_HTTPGET => true,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_URL => $request_url
+		));
+
+		$html = curl_exec($handle);
+		curl_close($handle);
+
+		//if (!$charset = mb_detect_encoding($source)) {
+		//}
+		preg_match("/charset=([\w|\-]+);?/", $html, $match);
+		$charset = isset($match[1]) ? $match[1] : 'utf-8';
+		$html = mb_convert_encoding($html, 'UTF-8', $charset);
+
+		// If we've got Tidy, let's clean up input.
+		// This step is highly recommended - PHP's default HTML parser often doesn't do a great job and results in strange output.
+		if (function_exists('tidy_parse_string')) {
+			$tidy = tidy_parse_string($html, array(), 'UTF8');
+			$tidy->cleanRepair();
+			$html = $tidy->value;
+		}
+
+		$readability = new Readability($html);
+		// print debug output?
+		$readability->debug = false;
+		// convert links to footnotes?
+		$readability->convertLinksToFootnotes = false;
+		$result = $readability->init();
+
+		if ($result) {
+			// $title = $readability->getTitle()->textContent;
+			$content = $readability->getContent()->innerHTML;
+			// if we've got Tidy, let's clean it up for output
+			if (function_exists('tidy_parse_string')) {
+				$tidy = tidy_parse_string($content, array('indent'=>true, 'show-body-only' => true), 'UTF8');
+				$tidy->cleanRepair();
+				$content = $tidy->value;
+			}
+		} else {
+			# Raise an error so that we know not to replace the RSS stub article with something even less helpful
+			throw new Exception('Full-text extraction failed');
+		}
+
+		return $content;
+	}
+
+	private function get_full_post_old($request_url) {
 		include_once 'Readability.inc.php';
 
 		$handle = curl_init();
@@ -95,7 +153,6 @@ class Af_Full extends Plugin {
 		} catch (Exception $e) {
 			return 'Readability: Error sacando datos';
 		}
-
 	}
 
 }

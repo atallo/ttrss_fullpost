@@ -11,6 +11,8 @@ Installation
     cd af_fullpost
     wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.inc.php
     wget https://github.com/atallo/ttrss_fullpost/raw/master/init.php
+    wget https://github.com/atallo/ttrss_fullpost/raw/master/JSLikeHTMLElement.php
+    wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.php
 
 Use
 ------------------------
@@ -22,7 +24,13 @@ Requires
 
 This plugin requites php-readiality libary
 
+Links
+------------------------
+
 https://github.com/feelinglucky/php-readability
+https://github.com/j0k3r/php-readability
+http://fivefilters.org/content-only/
+https://github.com/mihailShumilov/readability
 
 Notes
 ------------------------
