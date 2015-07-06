@@ -1,14 +1,10 @@
 <?php
-
-//
-// More info about this plugin in: https://github.com/atallo/ttrss_fullpost/
-//
 class Af_Full extends Plugin {
 	private $host;
 
 	function about() {
-		return array(0.01,
-			"Full post (requires CURL). (Work in progress)",
+		return array(0.09,
+			"Full post (requires CURL)",
 			"atallo");
 	}
 
@@ -16,20 +12,53 @@ class Af_Full extends Plugin {
 		$this->host = $host;
 
 		$host->add_hook($host::HOOK_ARTICLE_FILTER, $this);
+		$host->add_hook($host::HOOK_PREFS_EDIT_FEED, $this);
+		$host->add_hook($host::HOOK_PREFS_SAVE_FEED, $this);
+	}
+
+	function hook_prefs_edit_feed($feed_id) {
+		print "<div class=\"dlgSec\">".__("Plugin (full_post)")."</div>";
+		print "<div class=\"dlgSecCont\">";
+		$enabled_feeds = $this->host->get($this, "enabled_feeds");
+		if (!array($enabled_feeds)) $enabled_feeds = array();
+		$key = array_search($feed_id, $enabled_feeds);
+		$checked = $key !== FALSE ? "checked" : "";
+		print "<hr/><input dojoType=\"dijit.form.CheckBox\" type=\"checkbox\" id=\"affull_enabled\"
+			name=\"affull_enabled\"
+			$checked>&nbsp;<label for=\"affull_enabled\">".__('Show full post')."</label>";
+		print "</div>";
+	}
+
+	function hook_prefs_save_feed($feed_id) {
+		$enabled_feeds = $this->host->get($this, "enabled_feeds");
+		if (!is_array($enabled_feeds)) $enabled_feeds = array();
+		$enable = checkbox_to_sql_bool($_POST["affull_enabled"]) == 'true';
+		$key = array_search($feed_id, $enabled_feeds);
+		if ($enable) {
+			if ($key === FALSE) {
+				array_push($enabled_feeds, $feed_id);
+			}
+		} else {
+			if ($key !== FALSE) {
+				unset($enabled_feeds[$key]);
+			}
+		}
+		$this->host->set($this, "enabled_feeds", $enabled_feeds);
 	}
 
 	function hook_article_filter($article) {
 		if (!function_exists("curl_init"))
 			return $article;
 
-		if ((strpos($article["link"], "theinquirer.es") !== FALSE ||
-			strpos($article["link"], "silicon-news") !== FALSE ||
-			strpos($article["link"], "siliconnews") !== FALSE
-		)) {
-
-		    $article["content"] .= "<br/><hr/>Web original:<br><hr/>" .
-		        $this->get_full_post($article["link"]);
+		$enable_globally = $this->host->get($this, "enable_globally");
+		if (!$enable_globally) {
+			$enabled_feeds = $this->host->get($this, "enabled_feeds");
+			$key = array_search($article["feed"]["id"], $enabled_feeds);
+			if ($key === FALSE) return $article;
 		}
+
+		$article["content"] .= "<br/><hr/>Full post:<br><hr/>" .
+			$this->get_full_post($article["link"]);
 
 		return $article;
 	}
@@ -39,58 +68,35 @@ class Af_Full extends Plugin {
 	}
 
 	private function get_full_post($request_url) {
-	    // https://github.com/feelinglucky/php-readability#
+		include_once 'Readability.inc.php';
 
-	    include_once 'Readability.inc.php';
+		$handle = curl_init();
+		curl_setopt_array($handle, array(
+			CURLOPT_USERAGENT => USER_AGENT,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HEADER  => false,
+			CURLOPT_HTTPGET => true,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_URL => $request_url
+		));
 
-	    //define("DIR_ROOT", dirname(__FILE__));
-	    //define("DIR_CACHE",  DIR_ROOT . '/cache');
+		$source = curl_exec($handle);
+		curl_close($handle);
 
-	    //$request_url = "http://www.siliconnews.es/2013/07/01/estos-son-los-sueldos-de-los-principales-directivos-de-la-industria-tecnologica/";
+		preg_match("/charset=([\w|\-]+);?/", $source, $match);
+		$charset = isset($match[1]) ? $match[1] : 'utf-8';
 
-	    //$request_url_hash = md5($request_url);
-	    //$request_url_cache_file = sprintf(DIR_CACHE."/%s.url", $request_url_hash);
+		try {
+			$Readability = new Readability($source, $charset);
+			$Data = $Readability->getContent();
 
-	    //if (file_exists($request_url_cache_file) &&
-	    //    (time() - filemtime($request_url_cache_file) < CACHE_TIME)) {
-            //
-	    //    $source = file_get_contents($request_url_cache_file);
-            //} else {
+			return $Data['content'];
+		} catch (Exception $e) {
+			return 'Readability: Error sacando datos';
+		}
 
-                $handle = curl_init();
-                curl_setopt_array($handle, array(
-                    CURLOPT_USERAGENT => USER_AGENT,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HEADER  => false,
-                    CURLOPT_HTTPGET => true,
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_TIMEOUT => 30,
-                    CURLOPT_URL => $request_url
-                ));
-
-                $source = curl_exec($handle);
-                curl_close($handle);
-
-                // Write request data into cache file.
-            //    file_put_contents($request_url_cache_file, $source);
-            //}
-
-            //if (!$charset = mb_detect_encoding($source)) {
-            //}
-            preg_match("/charset=([\w|\-]+);?/", $source, $match);
-            $charset = isset($match[1]) ? $match[1] : 'utf-8';
-
-            $Readability = new Readability($source, $charset);
-            $Data = $Readability->getContent();
-
-            //$title   = $Data['title'];
-            //$content = $Data['content'];
-
-            //#include 'template/reader.html';
-            //echo $title;
-
-            return $Data['content'];
-        }
+	}
 
 }
 ?>
