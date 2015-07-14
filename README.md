@@ -11,7 +11,7 @@ Installation
     cd af_fullpost
     wget https://github.com/atallo/ttrss_fullpost/raw/master/init.php
 
-    Optional steps
+Optional steps
     wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.inc.php
     wget https://github.com/atallo/ttrss_fullpost/raw/master/JSLikeHTMLElement.php
     wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.php
@@ -50,7 +50,7 @@ Notes
 ------------------------
 
 * Please don't fork, send a patch
-* Now TTRSS include a similar plugin [af_readability](https://github.com/gothfox/Tiny-Tiny-RSS/tree/master/plugins/af_readability) without credits but heavy inspired in this plugin.
+* Now TTRSS include a similar plugin [af_readability](https://github.com/gothfox/Tiny-Tiny-RSS/tree/master/plugins/af_readability) without credits but heavy inspired in this plugin. Try it.
 * If you use another fork, you need configure again
 
 
