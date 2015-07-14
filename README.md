@@ -17,11 +17,6 @@ Optional steps
     wget https://github.com/atallo/ttrss_fullpost/raw/master/JSLikeHTMLElement.php
     wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.php
 
-Use
-------------------------
-
-Edit a Feed in TTRSS and check "Show full post"
-
 Requires
 ------------------------
 
@@ -39,11 +34,10 @@ Thanks
 * https://github.com/itohsnap/ttrss_fullpost
 * https://github.com/ranzhe/ttrss_fullpost
 
-
 Use
 ------------------------
 
-Mark "Show full post" in "Edit feed".
+Edit a Feed in TTRSS and check "Show full post"
 
 ![edit-feed](https://cloud.githubusercontent.com/assets/586093/8686502/3af1aa36-2a87-11e5-91bf-b50b621de278.png)
 
