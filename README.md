@@ -9,8 +9,10 @@ Installation
     cd ttrss-dir/plugins
     mkdir af_fullpost
     cd af_fullpost
-    wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.inc.php
     wget https://github.com/atallo/ttrss_fullpost/raw/master/init.php
+
+    Optional steps
+    wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.inc.php
     wget https://github.com/atallo/ttrss_fullpost/raw/master/JSLikeHTMLElement.php
     wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.php
 
@@ -37,7 +39,22 @@ Thanks
 * https://github.com/ranzhe/ttrss_fullpost
 
 
+Use
+------------------------
+
+Mark "Show full post" in "Edit feed".
+
+![edit-feed](https://cloud.githubusercontent.com/assets/586093/8686502/3af1aa36-2a87-11e5-91bf-b50b621de278.png)
+
 Notes
 ------------------------
 
-Please don't fork, send a patch
+* Please don't fork, send a patch
+* Now TTRSS include a similar plugin [af_readability](https://github.com/gothfox/Tiny-Tiny-RSS/tree/master/plugins/af_readability) without credits but heavy inspired in this plugin.
+
+
+
+
+
+
+
