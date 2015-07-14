@@ -12,6 +12,7 @@ Installation
     wget https://github.com/atallo/ttrss_fullpost/raw/master/init.php
 
 Optional steps
+
     wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.inc.php
     wget https://github.com/atallo/ttrss_fullpost/raw/master/JSLikeHTMLElement.php
     wget https://github.com/atallo/ttrss_fullpost/raw/master/Readability.php
