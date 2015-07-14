@@ -51,6 +51,7 @@ Notes
 
 * Please don't fork, send a patch
 * Now TTRSS include a similar plugin [af_readability](https://github.com/gothfox/Tiny-Tiny-RSS/tree/master/plugins/af_readability) without credits but heavy inspired in this plugin.
+* If you use another fork, you need configure again
 
 
 
