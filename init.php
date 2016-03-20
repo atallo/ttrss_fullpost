@@ -1,5 +1,5 @@
 <?php
-class Af_Full extends Plugin {
+class Af_FullPost extends Plugin {
 	private $host;
 
 	function about() {
@@ -59,7 +59,7 @@ class Af_Full extends Plugin {
 
 		//$article["content"] .= "<br/><hr/>Full post:<br><hr/>" .
 		//	$this->get_full_post($article["link"]);
-			
+
 		$fulldata = '';
 		try {
 			$fulldata = $this->get_full_post($article["link"]);
@@ -68,7 +68,7 @@ class Af_Full extends Plugin {
 			$fulldata = $e->getMessage() . '<br/><pre>' . $e->getTraceAsString() . '</pre>';
 		}
 		$article["content"] .= "<br/><hr/>Full post:<br><hr/>" . $fulldata;
-						
+
 		//
 		return $article;
 	}
@@ -82,9 +82,9 @@ class Af_Full extends Plugin {
 		//   1) https://github.com/feelinglucky/php-readability
 		//   2) http://code.fivefilters.org/php-readability/src
 		if (!class_exists("Readability")) include_once 'Readability.php';
-		
+
 		if (!class_exists("Readability")) require_once(dirname(dirname(__DIR__)). "/lib/readability/Readability.php");
-		
+
 		$handle = curl_init();
 		curl_setopt_array($handle, array(
 			CURLOPT_USERAGENT => USER_AGENT,
@@ -95,16 +95,16 @@ class Af_Full extends Plugin {
 			CURLOPT_TIMEOUT => 30,
 			CURLOPT_URL => $request_url
 		));
-		
+
 		$html = curl_exec($handle);
 		curl_close($handle);
-		
+
 		//if (!$charset = mb_detect_encoding($source)) {
 		//}
 		preg_match("/charset=([\w|\-]+);?/", $html, $match);
 		$charset = isset($match[1]) ? $match[1] : 'utf-8';
 		$html = mb_convert_encoding($html, 'UTF-8', $charset);
-		
+
 		// If we've got Tidy, let's clean up input.
 		// This step is highly recommended - PHP's default HTML parser often doesn't do a great job and results in strange output.
 		if (function_exists('tidy_parse_string')) {
@@ -112,14 +112,14 @@ class Af_Full extends Plugin {
 			$tidy->cleanRepair();
 			$html = $tidy->value;
 		}
-		
+
 		$readability = new Readability($html);
-		// print debug output? 
+		// print debug output?
 		$readability->debug = false;
 		// convert links to footnotes?
 		$readability->convertLinksToFootnotes = false;
 		$result = $readability->init();
-		
+
 		if ($result) {
 			// $title = $readability->getTitle()->textContent;
 			$content = $readability->getContent()->innerHTML;
@@ -133,7 +133,7 @@ class Af_Full extends Plugin {
 			# Raise an error so that we know not to replace the RSS stub article with something even less helpful
 			throw new Exception('Full-text extraction failed');
 		}
-		
+
 		return $content;
 	}
 
